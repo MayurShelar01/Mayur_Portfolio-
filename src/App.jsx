@@ -1,15 +1,83 @@
-import React, { useState } from 'react';
-import { Download, MapPin, Phone, Users, BarChart2, BrainCircuit, RefreshCw, ArrowRight, ChevronLeft, ChevronRight, Mail } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Download, MapPin, Phone, Users, BarChart2, BrainCircuit, RefreshCw, ArrowRight, Mail, Menu, X, ArrowUp } from 'lucide-react';
 import { SiFigma, SiGit, SiNotion, SiGoogleanalytics, SiVercel, SiSupabase } from 'react-icons/si';
 import { FaDatabase, FaLinkedin, FaGithub } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 
 function App() {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCertificates, setShowAllCertificates] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia('(pointer: fine) and (min-width: 768px)').matches);
+
+  // Card spotlight glow: track mouse position across all cards
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      document.querySelectorAll('.card-gradient').forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Scroll-spy: highlight active nav link
+  useEffect(() => {
+    const sections = document.querySelectorAll('section[id]');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-20% 0px -60% 0px' }
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => sections.forEach((section) => observer.unobserve(section));
+  }, []);
+
+  // Back-to-top visibility
+  useEffect(() => {
+    const handleScroll = () => setShowBackToTop(window.scrollY > 600);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => { if (window.innerWidth >= 768) setMobileMenuOpen(false); };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Scroll progress bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
   const fadeInUp = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  };
+
+  const fadeInLeft = {
+    hidden: { opacity: 0, x: -60 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  };
+
+  const fadeInRight = {
+    hidden: { opacity: 0, x: 60 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  };
+
+  const scaleIn = {
+    hidden: { opacity: 0, scale: 0.85 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } }
   };
 
   const staggerContainer = {
@@ -20,28 +88,119 @@ function App() {
     }
   };
 
+  const navItems = [
+    { id: 'experience', label: 'Experience' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'certification', label: 'Certification' },
+    { id: 'contact', label: 'Contact' },
+  ];
+
   return (
     <div className="min-h-screen text-[#CBD5E1] bg-[#020713] font-['Inter'] relative overflow-hidden">
+      {/* Scroll progress bar */}
+      <motion.div
+        style={{ scaleX }}
+        className="fixed top-0 left-0 right-0 h-[3px] z-[60] origin-left"
+      >
+        <div className="w-full h-full bg-gradient-to-r from-[#3AEEE3] via-[#2EE8E8] to-[#EB27E3]" />
+      </motion.div>
+
       <div className="glow-bg"></div>
 
       <nav className="fixed top-0 w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center bg-[#020713]/80 backdrop-blur-md border-b border-white/5">
         <div className="font-['Syne'] font-semibold text-lg text-white tracking-wide">Mayur Shelar</div>
         <div className="hidden md:flex gap-10 text-[13px] font-medium text-[#CBD5E1]">
-          <a href="#experience" className="hover:text-white transition-colors">Experience</a>
-          <a href="#projects" className="hover:text-white transition-colors">Projects</a>
-          <a href="#certification" className="hover:text-white transition-colors">Certification</a>
-          <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+          {navItems.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`hover:text-white transition-all duration-300 pb-1 border-b-2 ${
+                activeSection === item.id
+                  ? 'text-white border-[#3AEEE3]'
+                  : 'border-transparent'
+              }`}
+            >
+              {item.label}
+            </a>
+          ))}
         </div>
-        <button className="flex items-center gap-2 bg-[#2A2B31]/40 hover:bg-[#2A2B31]/80 px-5 py-2.5 rounded-md text-[13px] font-medium transition-colors text-[#CBD5E1] border border-white/10">
-          <Download size={14} className="text-[#3AEEE3]" />
-          My Resume
-        </button>
+        <div className="flex items-center gap-4">
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); alert("Please upload your Mayur_Shelar_Resume.pdf to the public/assets directory."); }}
+            className="hidden md:flex items-center gap-2 bg-[#2A2B31]/40 hover:bg-[#2A2B31]/80 px-5 py-2.5 rounded-md text-[13px] font-medium transition-colors text-[#CBD5E1] border border-white/10"
+          >
+            <Download size={14} className="text-[#3AEEE3]" />
+            My Resume
+          </a>
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden text-white p-2"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </nav>
+
+      {/* Mobile menu overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25 }}
+            className="fixed top-[73px] left-0 right-0 z-40 bg-[#020713]/95 backdrop-blur-xl border-b border-white/5 px-6 py-8 flex flex-col gap-6"
+          >
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-[16px] font-medium transition-colors ${
+                  activeSection === item.id ? 'text-white' : 'text-[#CBD5E1]'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); alert("Please upload your Mayur_Shelar_Resume.pdf to the public/assets directory."); }}
+              className="flex items-center gap-2 text-[14px] font-medium text-[#3AEEE3]"
+            >
+              <Download size={14} />
+              Download Resume
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Back to top button */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-[#2A2B31]/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-[#3AEEE3] hover:bg-[#2A2B31] hover:border-[#3AEEE3]/30 transition-all shadow-lg shadow-black/30"
+            aria-label="Scroll to top"
+          >
+            <ArrowUp size={20} />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <main className="pt-32">
         {/* ss1: Hero Area */}
         <section className="container mx-auto px-6 text-center mt-16 md:mt-24 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] opacity-20 pointer-events-none mix-blend-screen" style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(46,232,232,0.15) 0%, rgba(2,7,19,0) 70%)" }}>
+          {/* Animated gradient blobs */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] pointer-events-none" aria-hidden="true">
+            <div className="hero-blob hero-blob-1" />
+            <div className="hero-blob hero-blob-2" />
           </div>
 
           <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="relative z-10">
@@ -50,7 +209,18 @@ function App() {
               A Top PM Fellow · Next Leap
             </h1>
             <h2 className="text-[40px] md:text-[56px] lg:text-[64px] font-medium font-['Syne'] leading-tight mb-8">
-              <span className="text-gradient">Product Manager</span>
+              <span className="text-gradient inline-block">
+                {"Product Manager".split("").map((char, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 + i * 0.04, duration: 0.3, ease: "easeOut" }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                ))}
+              </span>
             </h2>
             <div className="flex items-center justify-center gap-2 text-[14px] text-[#CBD5E1] mt-4 mb-32">
               <MapPin size={14} />
@@ -194,51 +364,51 @@ function App() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {/* Row 1: Figma · FigJam · Notion · Whimsical */}
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <SiFigma size={20} className="text-[#F24E1E]" />
               <span className="text-[13px] font-medium text-white">Figma</span>
             </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <SiFigma size={20} className="text-[#00D084]" />
               <span className="text-[13px] font-medium text-white">FigJam</span>
             </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <SiNotion size={20} className="text-white" />
               <span className="text-[13px] font-medium text-white">Notion</span>
             </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <div className="w-5 h-5 rounded-full bg-[#A855F7] flex items-center justify-center"><div className="w-2 h-2 bg-white rotate-45"></div></div>
               <span className="text-[13px] font-medium text-white">Whimsical</span>
             </motion.div>
 
             {/* Row 2: GA4 · [Tools I Use] · SQL */}
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <SiGoogleanalytics size={20} className="text-[#E37400]" />
               <span className="text-[13px] font-medium text-white">GA4</span>
             </motion.div>
             {/* Title spanning 2 columns */}
-            <motion.div variants={fadeInUp} className="col-span-2 flex items-center justify-center rounded-lg">
+            <motion.div variants={scaleIn} className="col-span-2 flex items-center justify-center rounded-lg">
               <h2 className="text-[32px] md:text-[40px] font-bold font-['Syne'] text-white">Tools I Use</h2>
             </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <FaDatabase size={20} className="text-[#F29111]" />
               <span className="text-[13px] font-medium text-white">SQL</span>
             </motion.div>
 
             {/* Row 3: Figma Make AI · Git · Vercel · Supabase */}
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <SiFigma size={20} className="text-[#9B59B6]" />
               <span className="text-[13px] font-medium text-white">Figma Make AI</span>
             </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <SiGit size={20} className="text-[#F05032]" />
               <span className="text-[13px] font-medium text-white">Git</span>
             </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <SiVercel size={20} className="text-white" />
               <span className="text-[13px] font-medium text-white">Vercel</span>
             </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
+            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
               <SiSupabase size={20} className="text-[#3ECF8E]" />
               <span className="text-[13px] font-medium text-white">Supabase</span>
             </motion.div>
@@ -255,7 +425,7 @@ function App() {
           </motion.h2>
 
           <div className="space-y-24">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInLeft} className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Graduation Project · Case Study</p>
                 <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">GiftWise — AI Gift Direction</h3>
@@ -267,13 +437,13 @@ function App() {
                 </a>
               </div>
               <div className="rounded-xl overflow-hidden bg-[#151922] p-4 flex items-center justify-center h-full">
-                <img src="/assets/giftwise_cover.png" alt="GiftWise" className="w-full rounded-lg" />
+                <img src="/assets/giftwise_cover.png" alt="GiftWise — AI-powered gift recommendation app" loading="lazy" className="w-full rounded-lg" />
               </div>
             </motion.div>
 
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInRight} className="grid md:grid-cols-2 gap-12 items-center">
               <div className="order-2 md:order-1 rounded-xl overflow-hidden bg-[#151922] p-4 flex items-center justify-center h-full">
-                <img src="/assets/tindery_app.png" alt="Shohoz Learn App" className="w-full rounded-lg" />
+                <img src="/assets/tindery_app.png" alt="IronLog — AI-enhanced workout tracker" loading="lazy" className="w-full rounded-lg" />
               </div>
               <div className="order-1 md:order-2">
                 <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Build · Case Study</p>
@@ -292,7 +462,7 @@ function App() {
               </div>
             </motion.div>
 
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInLeft} className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Teardown</p>
                 <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">Make.com — New User Onboarding Teardown</h3>
@@ -304,14 +474,14 @@ function App() {
                 </a>
               </div>
               <div className="rounded-xl overflow-hidden bg-[#151922] p-4 flex items-center justify-center h-full">
-                <img src="/assets/make_teardown_cover.png" alt="Make.com Teardown" className="w-full rounded-lg" />
+                <img src="/assets/make_teardown_cover.png" alt="Make.com — New user onboarding teardown" loading="lazy" className="w-full rounded-lg" />
               </div>
             </motion.div>
 
             {showAllProjects && (
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} className="grid md:grid-cols-2 gap-12 items-center">
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInRight} className="grid md:grid-cols-2 gap-12 items-center">
                 <div className="order-2 md:order-1 rounded-xl overflow-hidden bg-[#151922] p-4 flex items-center justify-center h-full">
-                  <img src="/assets/project_vaani_cover.jpg" alt="Project Vaani" className="w-full rounded-lg" />
+                  <img src="/assets/project_vaani_cover.jpg" alt="Project Vaani — ChatGPT voice input PRD" loading="lazy" className="w-full rounded-lg" />
                 </div>
                 <div className="order-1 md:order-2">
                   <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Requirements Document</p>
@@ -352,7 +522,7 @@ function App() {
           >
             <motion.div variants={fadeInUp} className="card-gradient rounded-xl border border-white/5 overflow-hidden flex flex-col">
               <div className="p-2 bg-white/5">
-                <img src="/assets/nextleap_certificate.jpg" alt="Product Manager Fellowship" className="w-full aspect-[4/3] object-contain rounded-sm" />
+                <img src="/assets/nextleap_certificate.jpg" alt="Product Manager Fellowship — Top Fellow certificate from NextLeap" loading="lazy" className="w-full aspect-[4/3] object-contain rounded-sm" />
               </div>
               <div className="p-8">
                 <h3 className="text-[20px] font-medium text-white mb-6">Product Manager Fellowship — Top Fellow · NextLeap</h3>
@@ -364,7 +534,7 @@ function App() {
 
             <motion.div variants={fadeInUp} className="card-gradient rounded-xl border border-white/5 overflow-hidden flex flex-col">
               <div className="p-2 bg-white/5">
-                <img src="/assets/oracle_certificate_v2.png" alt="Oracle Generative AI" className="w-full aspect-[4/3] object-contain rounded-sm" />
+                <img src="/assets/oracle_certificate_v2.png" alt="Oracle Cloud Infrastructure 2025 — Generative AI Professional certificate" loading="lazy" className="w-full aspect-[4/3] object-contain rounded-sm" />
               </div>
               <div className="p-8">
                 <h3 className="text-[20px] font-medium text-white mb-6">Oracle Cloud Infrastructure 2025 — Generative AI Professional</h3>
@@ -378,7 +548,7 @@ function App() {
               <>
                 <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="card-gradient rounded-xl border border-white/5 overflow-hidden flex flex-col">
                   <div className="p-2 bg-white/5">
-                    <img src="/assets/pwc_certificate.png" alt="Effective Business Presentations with PowerPoint · PwC" className="w-full aspect-[4/3] object-contain rounded-sm" />
+                    <img src="/assets/pwc_certificate.png" alt="Effective Business Presentations with PowerPoint — PwC certificate" loading="lazy" className="w-full aspect-[4/3] object-contain rounded-sm" />
                   </div>
                   <div className="p-8">
                     <h3 className="text-[20px] font-medium text-white mb-6">Effective Business Presentations with PowerPoint · PwC</h3>
@@ -390,7 +560,7 @@ function App() {
 
                 <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="card-gradient rounded-xl border border-white/5 overflow-hidden flex flex-col">
                   <div className="p-2 bg-white/5">
-                    <img src="/assets/ibm_certificate.png" alt="Introduction to Agile Development and Scrum · IBM" className="w-full aspect-[4/3] object-contain rounded-sm" />
+                    <img src="/assets/ibm_certificate.png" alt="Introduction to Agile Development and Scrum — IBM certificate" loading="lazy" className="w-full aspect-[4/3] object-contain rounded-sm" />
                   </div>
                   <div className="p-8">
                     <h3 className="text-[20px] font-medium text-white mb-6">Introduction to Agile Development and Scrum · IBM</h3>
@@ -425,7 +595,7 @@ function App() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex flex-col items-center relative">
               <div className="relative mb-8">
-                <img src="/assets/profile_photo_v2.png" alt="Mayur Shelar" className="w-48 h-48 object-cover rounded-full bg-white/5 border border-white/10" />
+                <img src="/assets/profile_photo_v2.png" alt="Mayur Shelar — Product Manager" loading="lazy" className="w-48 h-48 object-cover rounded-full bg-white/5 border border-white/10" />
               </div>
 
               <div className="space-y-4 text-center">
@@ -444,14 +614,14 @@ function App() {
               initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
               className="grid grid-cols-2 gap-6"
             >
-              <motion.a variants={fadeInUp} href="https://www.linkedin.com/in/mayurr-shelar-ms/" target="_blank" rel="noreferrer" className="card-gradient p-8 rounded-xl border border-white/5 flex flex-col items-center justify-center gap-4 group hover:border-[#0A66C2]/50 transition-all">
+              <motion.a variants={fadeInUp} href="https://www.linkedin.com/in/mayurr-shelar-ms/" target="_blank" rel="noreferrer" aria-label="Visit Mayur's LinkedIn profile" className="card-gradient p-8 rounded-xl border border-white/5 flex flex-col items-center justify-center gap-4 group hover:border-[#0A66C2]/50 transition-all">
                 <div className="w-14 h-14 rounded-full bg-[#0A66C2] flex items-center justify-center text-white group-hover:scale-110 transition-transform">
                   <FaLinkedin size={28} />
                 </div>
                 <span className="text-[14px] font-medium text-[#CBD5E1] group-hover:text-white underline decoration-transparent group-hover:decoration-white underline-offset-4 transition-all">LinkedIn</span>
               </motion.a>
 
-              <motion.a variants={fadeInUp} href="https://github.com/MayurShelar01" target="_blank" rel="noreferrer" className="card-gradient p-8 rounded-xl border border-white/5 flex flex-col items-center justify-center gap-4 group hover:border-white/50 transition-all">
+              <motion.a variants={fadeInUp} href="https://github.com/MayurShelar01" target="_blank" rel="noreferrer" aria-label="Visit Mayur's GitHub profile" className="card-gradient p-8 rounded-xl border border-white/5 flex flex-col items-center justify-center gap-4 group hover:border-white/50 transition-all">
                 <div className="w-14 h-14 rounded-full bg-[#333] flex items-center justify-center text-white group-hover:scale-110 transition-transform">
                   <FaGithub size={28} />
                 </div>
@@ -464,11 +634,20 @@ function App() {
 
       {/* NEW: Footer */}
       <footer className="bg-[#121110] pt-16 pb-12 text-center border-t border-white/5">
-        <div className="flex justify-center gap-10 text-[13px] font-medium text-[#A1A1AA] mb-12">
+        <div className="flex justify-center gap-10 text-[13px] font-medium text-[#A1A1AA] mb-10">
           <a href="#experience" className="hover:text-white transition-colors">Experience</a>
           <a href="#projects" className="hover:text-white transition-colors">Projects</a>
           <a href="#certification" className="hover:text-white transition-colors">Certification</a>
           <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+        </div>
+
+        <div className="flex justify-center gap-5 mb-10">
+          <a href="https://www.linkedin.com/in/mayurr-shelar-ms/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#A1A1AA] hover:text-white hover:border-white/20 transition-all">
+            <FaLinkedin size={18} />
+          </a>
+          <a href="https://github.com/MayurShelar01" target="_blank" rel="noreferrer" aria-label="GitHub" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#A1A1AA] hover:text-white hover:border-white/20 transition-all">
+            <FaGithub size={18} />
+          </a>
         </div>
 
         <div className="w-full max-w-5xl mx-auto h-px bg-white/5 mb-12"></div>

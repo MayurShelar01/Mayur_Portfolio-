@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --bg-main: #020713;
   --text-main: #CBD5E1;
@@ -71,4 +75,77 @@ p {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(58, 238, 227, 0.07),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.card-gradient:hover::before {
+  opacity: 1;
+}
+
+/* Hero animated gradient blobs */
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  mix-blend-mode: screen;
+}
+
+.hero-blob-1 {
+  width: 500px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(58, 238, 227, 0.6), transparent 70%);
+  top: 10%;
+  left: 15%;
+  animation: blobDrift1 8s ease-in-out infinite alternate;
+}
+
+.hero-blob-2 {
+  width: 400px;
+  height: 350px;
+  background: radial-gradient(ellipse at center, rgba(235, 39, 227, 0.5), transparent 70%);
+  bottom: 10%;
+  right: 15%;
+  animation: blobDrift2 10s ease-in-out infinite alternate;
+}
+
+@keyframes blobDrift1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.1);
+  }
+  100% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+@keyframes blobDrift2 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(-30px, 20px) scale(1.15) rotate(10deg);
+  }
+  100% {
+    transform: translate(25px, -15px) scale(0.9) rotate(-5deg);
+  }
 }
