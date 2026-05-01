@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Download, MapPin, Phone, Users, BarChart2, BrainCircuit, RefreshCw, ArrowRight, Mail, Menu, X, ArrowUp } from 'lucide-react';
-import { SiFigma, SiGit, SiNotion, SiGoogleanalytics, SiVercel, SiSupabase } from 'react-icons/si';
+import { Download, MapPin, Phone, Users, BarChart2, BrainCircuit, RefreshCw, ArrowRight, Mail, Menu, X, ArrowUp, FileText } from 'lucide-react';
+import { SiFigma, SiGit, SiNotion, SiGoogleanalytics, SiVercel, SiSupabase, SiMongodb } from 'react-icons/si';
 import { FaDatabase, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 
@@ -130,7 +130,7 @@ function App() {
             onClick={(e) => { e.preventDefault(); alert("Please upload your Mayur_Shelar_Resume.pdf to the public/assets directory."); }}
             className="hidden md:flex items-center gap-2 bg-[#2A2B31]/40 hover:bg-[#2A2B31]/80 px-5 py-2.5 rounded-md text-[13px] font-medium transition-colors text-[#CBD5E1] border border-white/10"
           >
-            <Download size={14} className="text-[#3AEEE3]" />
+            <FileText size={15} className="text-[#3AEEE3]" />
             My Resume
           </a>
           {/* Mobile hamburger */}
@@ -358,59 +358,64 @@ function App() {
         </section>
 
         {/* NEW: Tools I Use */}
-        <section className="container mx-auto px-6 mt-40 max-w-3xl">
+        <section className="container mx-auto px-6 mt-40 max-w-5xl">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {/* Row 1: Figma · FigJam · Notion · Whimsical */}
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <SiFigma size={20} className="text-[#F24E1E]" />
-              <span className="text-[13px] font-medium text-white">Figma</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <div className="w-10 h-10 bg-[#2C2D33] rounded-[10px] flex items-center justify-center shadow-inner shrink-0">
+                <img src="/assets/figma.svg" alt="Figma" className="w-[22px] h-[22px]" />
+              </div>
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Figma</span>
             </motion.div>
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <SiFigma size={20} className="text-[#00D084]" />
-              <span className="text-[13px] font-medium text-white">FigJam</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <SiMongodb size={36} className="text-[#47A248] shrink-0" />
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">MongoDB</span>
             </motion.div>
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <SiNotion size={20} className="text-white" />
-              <span className="text-[13px] font-medium text-white">Notion</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <SiNotion size={36} className="text-white shrink-0" />
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Notion</span>
             </motion.div>
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <div className="w-5 h-5 rounded-full bg-[#A855F7] flex items-center justify-center"><div className="w-2 h-2 bg-white rotate-45"></div></div>
-              <span className="text-[13px] font-medium text-white">Whimsical</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <div className="w-10 h-10 rounded-full bg-[#A855F7] flex items-center justify-center shrink-0"><div className="w-3 h-3 bg-white rotate-45"></div></div>
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Whimsical</span>
             </motion.div>
 
             {/* Row 2: GA4 · [Tools I Use] · SQL */}
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <SiGoogleanalytics size={20} className="text-[#E37400]" />
-              <span className="text-[13px] font-medium text-white">GA4</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <SiGoogleanalytics size={36} className="text-[#E37400] shrink-0" />
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">GA4</span>
             </motion.div>
             {/* Title spanning 2 columns */}
             <motion.div variants={scaleIn} className="col-span-2 flex items-center justify-center rounded-lg">
-              <h2 className="text-[32px] md:text-[40px] font-bold font-['Syne'] text-white">Tools I Use</h2>
+              <h2 className="text-[28px] md:text-[32px] font-bold font-['Inter'] text-white">Tools I Use</h2>
             </motion.div>
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <FaDatabase size={20} className="text-[#F29111]" />
-              <span className="text-[13px] font-medium text-white">SQL</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <div className="h-10 flex items-center justify-center gap-1 text-[#F29111] shrink-0">
+                <FaDatabase size={24} />
+                <span className="text-[18px] font-bold tracking-tighter mt-[3px]">SQL</span>
+              </div>
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">SQL</span>
             </motion.div>
 
             {/* Row 3: Figma Make AI · Git · Vercel · Supabase */}
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <SiFigma size={20} className="text-[#9B59B6]" />
-              <span className="text-[13px] font-medium text-white">Figma Make AI</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <SiFigma size={36} className="text-[#9B59B6] shrink-0" />
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Figma Make AI</span>
             </motion.div>
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <SiGit size={20} className="text-[#F05032]" />
-              <span className="text-[13px] font-medium text-white">Git</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <SiGit size={36} className="text-[#F05032] shrink-0" />
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Git</span>
             </motion.div>
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <SiVercel size={20} className="text-white" />
-              <span className="text-[13px] font-medium text-white">Vercel</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <SiVercel size={36} className="text-white shrink-0" />
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Vercel</span>
             </motion.div>
-            <motion.div variants={scaleIn} className="card-gradient aspect-square flex flex-col items-center justify-center rounded-lg border border-white/5 gap-2">
-              <SiSupabase size={20} className="text-[#3ECF8E]" />
-              <span className="text-[13px] font-medium text-white">Supabase</span>
+            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
+              <SiSupabase size={36} className="text-[#3ECF8E] shrink-0" />
+              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Supabase</span>
             </motion.div>
           </motion.div>
         </section>
@@ -436,14 +441,14 @@ function App() {
                   View Work <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
-              <div className="rounded-xl overflow-hidden bg-[#151922] p-4 flex items-center justify-center h-full">
-                <img src="/assets/giftwise_cover.png" alt="GiftWise — AI-powered gift recommendation app" loading="lazy" className="w-full rounded-lg" />
+              <div className="rounded-xl overflow-hidden bg-[#151922] flex items-center justify-center h-full">
+                <img src="/assets/giftwise_cover.png" alt="GiftWise — AI-powered gift recommendation app" loading="lazy" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInRight} className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="order-2 md:order-1 rounded-xl overflow-hidden bg-[#151922] p-4 flex items-center justify-center h-full">
-                <img src="/assets/tindery_app.png" alt="IronLog — AI-enhanced workout tracker" loading="lazy" className="w-full rounded-lg" />
+              <div className="order-2 md:order-1 rounded-xl overflow-hidden bg-[#151922] flex items-center justify-center h-full">
+                <img src="/assets/ironlog_cover.png" alt="IronLog — AI-enhanced workout tracker" loading="lazy" className="w-full h-full object-cover" />
               </div>
               <div className="order-1 md:order-2">
                 <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Build · Case Study</p>
@@ -473,15 +478,15 @@ function App() {
                   View Teardown <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
-              <div className="rounded-xl overflow-hidden bg-[#151922] p-4 flex items-center justify-center h-full">
-                <img src="/assets/make_teardown_cover.png" alt="Make.com — New user onboarding teardown" loading="lazy" className="w-full rounded-lg" />
+              <div className="rounded-xl overflow-hidden bg-[#151922] flex items-center justify-center h-full">
+                <img src="/assets/make_teardown_cover.png" alt="Make.com — New user onboarding teardown" loading="lazy" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
             {showAllProjects && (
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInRight} className="grid md:grid-cols-2 gap-12 items-center">
-                <div className="order-2 md:order-1 rounded-xl overflow-hidden bg-[#151922] p-4 flex items-center justify-center h-full">
-                  <img src="/assets/project_vaani_cover.jpg" alt="Project Vaani — ChatGPT voice input PRD" loading="lazy" className="w-full rounded-lg" />
+                <div className="order-2 md:order-1 rounded-xl overflow-hidden bg-[#151922] flex items-center justify-center h-full">
+                  <img src="/assets/project_vaani_cover.jpg" alt="Project Vaani — ChatGPT voice input PRD" loading="lazy" className="w-full h-full object-cover" />
                 </div>
                 <div className="order-1 md:order-2">
                   <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Requirements Document</p>
