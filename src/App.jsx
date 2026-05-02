@@ -108,7 +108,12 @@ function App() {
       <div className="glow-bg"></div>
 
       <nav className="fixed top-0 w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center bg-[#020713]/80 backdrop-blur-md border-b border-white/5">
-        <div className="font-['Syne'] font-semibold text-lg text-white tracking-wide">Mayur Shelar</div>
+        <div className="flex items-center gap-3">
+          <span className="font-['Syne'] font-semibold text-lg text-white tracking-wide">Mayur Shelar</span>
+          <span className="hidden md:inline-flex items-center gap-1.5 text-[11px] font-medium text-[#34D399] bg-[#34D399]/10 border border-[#34D399]/20 px-2.5 py-1 rounded-full">
+            <span className="status-dot" />Open To Work
+          </span>
+        </div>
         <div className="hidden md:flex gap-10 text-[13px] font-medium text-[#CBD5E1]">
           {navItems.map((item) => (
             <a
@@ -222,17 +227,24 @@ function App() {
                 ))}
               </span>
             </h2>
-            <div className="flex items-center justify-center gap-2 text-[14px] text-[#CBD5E1] mt-4 mb-32">
-              <MapPin size={14} />
-              <span>Based in Mumbai, India</span>
-            </div>
+            <p className="text-[15px] md:text-[16px] text-[#A1A1AA] max-w-xl mx-auto mb-32 leading-relaxed">
+              Turning research into roadmaps and features into outcomes.
+            </p>
 
-            <div className="max-w-4xl mx-auto flex justify-between items-center text-[13px] text-[#CBD5E1] border-t border-dashed border-white/20 pt-5 mt-24">
-              <span></span>
+            <div className="max-w-4xl mx-auto border-t border-dashed border-white/20 pt-5" />
+            <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 text-[13px] text-[#CBD5E1]">
               <div className="flex items-center gap-2">
-                <Phone size={14} />
-                <span>Let's Talk : +91 98196 22036</span>
+                <MapPin size={14} className="text-[#3AEEE3]" />
+                <span>Mumbai, India</span>
               </div>
+              <a href="mailto:mayursh1111@gmail.com" className="flex items-center gap-2 hover:text-[#3AEEE3] transition-colors">
+                <Mail size={14} className="text-[#3AEEE3]" />
+                <span>mayursh1111@gmail.com</span>
+              </a>
+              <a href="tel:+919819622036" className="flex items-center gap-2 hover:text-[#3AEEE3] transition-colors">
+                <Phone size={14} className="text-[#3AEEE3]" />
+                <span>+91 98196 22036</span>
+              </a>
             </div>
           </motion.div>
         </section>
@@ -249,34 +261,22 @@ function App() {
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
             className="grid md:grid-cols-2 gap-6"
           >
-            <motion.div variants={fadeInUp} className="card-gradient p-8 rounded-xl border border-white/5">
-              <Users className="text-white mb-6" size={36} strokeWidth={1.5} />
-              <h3 className="text-[20px] font-medium text-white mb-3 font-['Syne']">People-Led Execution</h3>
-              <p className="text-[13px] text-[#A1A1AA] leading-relaxed">
-                Great products are built by great teams. I've led and coordinated large-scale events across 20+ institutions bringing together diverse people, managing pressure, and always delivering on the goal.
-              </p>
-            </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient p-8 rounded-xl border border-white/5">
-              <BarChart2 className="text-white mb-6" size={36} strokeWidth={1.5} />
-              <h3 className="text-[20px] font-medium text-white mb-3 font-['Syne']">Data Driven Decisions</h3>
-              <p className="text-[13px] text-[#A1A1AA] leading-relaxed">
-                I let data lead the way. From defining success metrics to prioritising features every product decision I make is backed by evidence, not instinct.
-              </p>
-            </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient p-8 rounded-xl border border-white/5">
-              <RefreshCw className="text-white mb-6" size={36} strokeWidth={1.5} />
-              <h3 className="text-[20px] font-medium text-white mb-3 font-['Syne']">User-Centric Design</h3>
-              <p className="text-[13px] text-[#A1A1AA] leading-relaxed">
-                I start with the user, always. Real conversations over assumptions because building the right thing matters more than building the thing fast.
-              </p>
-            </motion.div>
-            <motion.div variants={fadeInUp} className="card-gradient p-8 rounded-xl border border-white/5">
-              <BrainCircuit className="text-white mb-6" size={36} strokeWidth={1.5} />
-              <h3 className="text-[20px] font-medium text-white mb-3 font-['Syne']">Continuous Learning</h3>
-              <p className="text-[13px] text-[#A1A1AA] leading-relaxed">
-                Every product, every cohort, every challenge teaches me something new. I stay curious, adapt quickly, and bring fresh thinking into everything I work on.
-              </p>
-            </motion.div>
+            {[
+              { icon: <Users size={28} strokeWidth={1.5} />, title: "People-Led Execution", desc: "Great products are built by great teams. I've led and coordinated large-scale events across 20+ institutions bringing together diverse people, managing pressure, and always delivering on the goal." },
+              { icon: <BarChart2 size={28} strokeWidth={1.5} />, title: "Data Driven Decisions", desc: "I let data lead the way. From defining success metrics to prioritising features every product decision I make is backed by evidence, not instinct." },
+              { icon: <RefreshCw size={28} strokeWidth={1.5} />, title: "User-Centric Design", desc: "I start with the user, always. Real conversations over assumptions because building the right thing matters more than building the thing fast." },
+              { icon: <BrainCircuit size={28} strokeWidth={1.5} />, title: "Continuous Learning", desc: "Every product, every cohort, every challenge teaches me something new. I stay curious, adapt quickly, and bring fresh thinking into everything I work on." },
+            ].map((card, i) => (
+              <motion.div key={i} variants={fadeInUp} className="card-gradient p-8 rounded-xl border border-white/5">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center text-white">
+                    {card.icon}
+                  </div>
+                </div>
+                <h3 className="text-[20px] font-medium text-white mb-3 font-['Syne']">{card.title}</h3>
+                <p className="text-[13px] text-[#A1A1AA] leading-relaxed">{card.desc}</p>
+              </motion.div>
+            ))}
           </motion.div>
         </section>
 
@@ -340,83 +340,56 @@ function App() {
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer}
-            className="grid md:grid-cols-3 gap-x-12 gap-y-10 text-left pt-8"
+            className="grid md:grid-cols-3 gap-12"
           >
             {[
-              "Product Discovery", "User Research", "PRD Writing",
-              "Stakeholder Management", "Competitive Analysis", "GTM Strategy",
-              "Agile & Sprint Planning", "Wireframing", "Prompt Engineering"
-            ].map((skill, index) => (
-              <motion.div key={index} variants={fadeInUp} className="relative">
-                <p className="text-[14px] text-[#CBD5E1] mb-3">{skill}</p>
-                <div className="w-full h-px bg-white/10 relative">
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+              { category: "Discovery & Strategy", skills: ["Product Discovery", "User Research", "Competitive Analysis", "GTM Strategy"] },
+              { category: "Execution & Delivery", skills: ["PRD Writing", "Stakeholder Management", "Agile & Sprint Planning", "RICE Prioritisation"] },
+              { category: "Technical & Design", skills: ["Wireframing", "Prompt Engineering", "Data Analysis", "A/B Testing"] },
+            ].map((group, gi) => (
+              <motion.div key={gi} variants={fadeInUp} className="flex flex-col items-center">
+                <p className="text-[12px] font-medium text-[#3AEEE3] uppercase tracking-widest mb-5">{group.category}</p>
+                <div className="flex flex-wrap justify-center gap-2.5">
+                  {group.skills.map((skill, si) => (
+                    <span key={si} className="skill-pill">{skill}</span>
+                  ))}
                 </div>
               </motion.div>
             ))}
           </motion.div>
         </section>
 
-        {/* NEW: Tools I Use */}
+        {/* Tools I Use */}
         <section className="container mx-auto px-6 mt-40 max-w-5xl">
+          <motion.h2
+            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp}
+            className="text-[32px] md:text-[40px] font-medium font-['Syne'] text-center text-white mb-16"
+          >
+            Tools I Use
+          </motion.h2>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
-            {/* Row 1: Figma · FigJam · Notion · Whimsical */}
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <div className="w-10 h-10 bg-[#2C2D33] rounded-[10px] flex items-center justify-center shadow-inner shrink-0">
-                <img src="/assets/figma.svg" alt="Figma" className="w-[22px] h-[22px]" />
-              </div>
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Figma</span>
-            </motion.div>
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <SiMongodb size={36} className="text-[#47A248] shrink-0" />
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">MongoDB</span>
-            </motion.div>
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <SiNotion size={36} className="text-white shrink-0" />
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Notion</span>
-            </motion.div>
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <div className="w-10 h-10 rounded-full bg-[#A855F7] flex items-center justify-center shrink-0"><div className="w-3 h-3 bg-white rotate-45"></div></div>
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Whimsical</span>
-            </motion.div>
-
-            {/* Row 2: GA4 · [Tools I Use] · SQL */}
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <SiGoogleanalytics size={36} className="text-[#E37400] shrink-0" />
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">GA4</span>
-            </motion.div>
-            {/* Title spanning 2 columns */}
-            <motion.div variants={scaleIn} className="col-span-2 flex items-center justify-center rounded-lg">
-              <h2 className="text-[28px] md:text-[32px] font-bold font-['Inter'] text-white">Tools I Use</h2>
-            </motion.div>
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <div className="h-10 flex items-center justify-center gap-1 text-[#F29111] shrink-0">
-                <FaDatabase size={24} />
-                <span className="text-[18px] font-bold tracking-tighter mt-[3px]">SQL</span>
-              </div>
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">SQL</span>
-            </motion.div>
-
-            {/* Row 3: Figma Make AI · Git · Vercel · Supabase */}
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <SiFigma size={36} className="text-[#9B59B6] shrink-0" />
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Figma Make AI</span>
-            </motion.div>
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <SiGit size={36} className="text-[#F05032] shrink-0" />
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Git</span>
-            </motion.div>
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <SiVercel size={36} className="text-white shrink-0" />
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Vercel</span>
-            </motion.div>
-            <motion.div variants={scaleIn} className="overflow-visible aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:border-white/20 transition-all gap-4 p-5">
-              <SiSupabase size={36} className="text-[#3ECF8E] shrink-0" />
-              <span className="text-[14px] font-normal text-white/80 whitespace-nowrap">Supabase</span>
-            </motion.div>
+            {[
+              { icon: <img src="/assets/figma.svg" alt="Figma" className="w-[22px] h-[22px]" />, name: "Figma" },
+              { icon: <SiMongodb size={28} />, name: "MongoDB", color: "text-[#47A248]" },
+              { icon: <SiNotion size={28} />, name: "Notion", color: "text-white" },
+              { icon: <div className="w-10 h-10 rounded-full bg-[#A855F7] flex items-center justify-center"><div className="w-3 h-3 bg-white rotate-45" /></div>, name: "Whimsical" },
+              { icon: <SiGoogleanalytics size={28} />, name: "GA4", color: "text-[#E37400]" },
+              { icon: <div className="flex items-center gap-1 text-[#F29111]"><FaDatabase size={22} /><span className="text-[16px] font-bold tracking-tighter">SQL</span></div>, name: "SQL" },
+              { icon: <SiFigma size={28} />, name: "Figma Make AI", color: "text-[#9B59B6]" },
+              { icon: <SiGit size={28} />, name: "Git", color: "text-[#F05032]" },
+              { icon: <SiVercel size={28} />, name: "Vercel", color: "text-white" },
+              { icon: <SiSupabase size={28} />, name: "Supabase", color: "text-[#3ECF8E]" },
+            ].map((tool, i) => (
+              <motion.div key={i} variants={scaleIn} className="tool-card aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent gap-4 p-5">
+                <div className={`shrink-0 ${tool.color || ''}`}>
+                  {tool.icon}
+                </div>
+                <span className="text-[13px] font-normal text-white/70 whitespace-nowrap">{tool.name}</span>
+              </motion.div>
+            ))}
           </motion.div>
         </section>
 
@@ -637,8 +610,9 @@ function App() {
         </section>
       </main>
 
-      {/* NEW: Footer */}
-      <footer className="bg-[#121110] pt-16 pb-12 text-center border-t border-white/5">
+      {/* Footer */}
+      <footer className="bg-[#121110] pt-16 pb-12 text-center">
+        <div className="footer-gradient-border mb-12" />
         <div className="flex justify-center gap-10 text-[13px] font-medium text-[#A1A1AA] mb-10">
           <a href="#experience" className="hover:text-white transition-colors">Experience</a>
           <a href="#projects" className="hover:text-white transition-colors">Projects</a>
@@ -657,7 +631,7 @@ function App() {
 
         <div className="w-full max-w-5xl mx-auto h-px bg-white/5 mb-12"></div>
 
-        <div className="font-['Syne'] font-medium text-[32px] text-white tracking-widest mb-4">MAYUR SHELAR</div>
+        <div className="font-['Syne'] font-medium text-[28px] text-white tracking-[0.2em] mb-4">MAYUR SHELAR</div>
         <p className="text-[14px] text-[#A1A1AA] mb-8">Product Manager · Open To Work</p>
 
         <p className="text-[12px] text-[#A1A1AA]/60">©All Rights Reserved {new Date().getFullYear()}</p>
