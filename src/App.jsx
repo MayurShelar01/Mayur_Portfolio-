@@ -11,6 +11,8 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isDesktop, setIsDesktop] = useState(() => window.matchMedia('(pointer: fine) and (min-width: 768px)').matches);
+  const [taglineIdx, setTaglineIdx] = useState(0);
+  const [cursorPos, setCursorPos] = useState({ x: -500, y: -500 });
 
   // Card spotlight glow: track mouse position across all cards
   useEffect(() => {
@@ -56,6 +58,25 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Rotating taglines
+  const taglines = [
+    "Turning research into roadmaps and features into outcomes.",
+    "Shipping products users actually need.",
+    "Research-first. Data-backed. User-obsessed.",
+  ];
+  useEffect(() => {
+    const interval = setInterval(() => setTaglineIdx(prev => (prev + 1) % 3), 3200);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Cursor glow tracking (desktop only)
+  useEffect(() => {
+    if (!isDesktop) return;
+    const handleCursorMove = (e) => setCursorPos({ x: e.clientX, y: e.clientY });
+    window.addEventListener('mousemove', handleCursorMove);
+    return () => window.removeEventListener('mousemove', handleCursorMove);
+  }, [isDesktop]);
+
   // Scroll progress bar
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -96,7 +117,16 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen text-[#CBD5E1] bg-[#020713] font-['Inter'] relative overflow-hidden">
+    <motion.div
+      className="min-h-screen text-[#CBD5E1] bg-[#020713] font-['Inter'] relative overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+    >
+      {/* Custom cursor glow — desktop only */}
+      {isDesktop && (
+        <div className="cursor-glow" style={{ left: cursorPos.x, top: cursorPos.y }} />
+      )}
       {/* Scroll progress bar */}
       <motion.div
         style={{ scaleX }}
@@ -227,9 +257,20 @@ function App() {
                 ))}
               </span>
             </h2>
-            <p className="text-[15px] md:text-[16px] text-[#A1A1AA] max-w-xl mx-auto mb-32 leading-relaxed">
-              Turning research into roadmaps and features into outcomes.
-            </p>
+            <div className="h-12 flex items-center justify-center mb-32">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={taglineIdx}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  className="text-[15px] md:text-[16px] text-[#A1A1AA] max-w-xl mx-auto leading-relaxed"
+                >
+                  {taglines[taglineIdx]}
+                </motion.p>
+              </AnimatePresence>
+            </div>
 
             <div className="max-w-4xl mx-auto border-t border-dashed border-white/20 pt-5" />
             <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 text-[13px] text-[#CBD5E1]">
@@ -248,6 +289,8 @@ function App() {
             </div>
           </motion.div>
         </section>
+
+        <div className="section-divider max-w-2xl mx-auto" />
 
         {/* ss2: How I Work */}
         <section className="container mx-auto px-6 mt-32 max-w-5xl">
@@ -279,6 +322,8 @@ function App() {
             ))}
           </motion.div>
         </section>
+
+        <div className="section-divider max-w-2xl mx-auto" />
 
         {/* ss3 & ss4: Experience */}
         <section id="experience" className="container mx-auto px-6 mt-40 max-w-5xl">
@@ -323,6 +368,8 @@ function App() {
           </div>
         </section>
 
+        <div className="section-divider max-w-2xl mx-auto" />
+
         {/* ss5: I Help You To Make Wonderful Products */}
         <section className="container mx-auto px-6 mt-40 max-w-5xl text-center">
           <motion.h2
@@ -359,6 +406,8 @@ function App() {
           </motion.div>
         </section>
 
+        <div className="section-divider max-w-2xl mx-auto" />
+
         {/* Tools I Use */}
         <section className="container mx-auto px-6 mt-40 max-w-5xl">
           <motion.h2
@@ -372,18 +421,19 @@ function App() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {[
-              { icon: <img src="/assets/figma.svg" alt="Figma" className="w-[22px] h-[22px]" />, name: "Figma" },
-              { icon: <SiMongodb size={28} />, name: "MongoDB", color: "text-[#47A248]" },
-              { icon: <SiNotion size={28} />, name: "Notion", color: "text-white" },
-              { icon: <div className="w-10 h-10 rounded-full bg-[#A855F7] flex items-center justify-center"><div className="w-3 h-3 bg-white rotate-45" /></div>, name: "Whimsical" },
-              { icon: <SiGoogleanalytics size={28} />, name: "GA4", color: "text-[#E37400]" },
-              { icon: <div className="flex items-center gap-1 text-[#F29111]"><FaDatabase size={22} /><span className="text-[16px] font-bold tracking-tighter">SQL</span></div>, name: "SQL" },
-              { icon: <SiFigma size={28} />, name: "Figma Make AI", color: "text-[#9B59B6]" },
-              { icon: <SiGit size={28} />, name: "Git", color: "text-[#F05032]" },
-              { icon: <SiVercel size={28} />, name: "Vercel", color: "text-white" },
-              { icon: <SiSupabase size={28} />, name: "Supabase", color: "text-[#3ECF8E]" },
+              { icon: <img src="/assets/figma.svg" alt="Figma" className="w-[22px] h-[22px]" />, name: "Figma", tip: "Wireframing & Prototyping" },
+              { icon: <SiMongodb size={28} />, name: "MongoDB", color: "text-[#47A248]", tip: "NoSQL Database" },
+              { icon: <SiNotion size={28} />, name: "Notion", color: "text-white", tip: "Roadmaps & Documentation" },
+              { icon: <div className="w-10 h-10 rounded-full bg-[#A855F7] flex items-center justify-center"><div className="w-3 h-3 bg-white rotate-45" /></div>, name: "Whimsical", tip: "User Flows & Mind Maps" },
+              { icon: <SiGoogleanalytics size={28} />, name: "GA4", color: "text-[#E37400]", tip: "Product Analytics" },
+              { icon: <div className="flex items-center gap-1 text-[#F29111]"><FaDatabase size={22} /><span className="text-[16px] font-bold tracking-tighter">SQL</span></div>, name: "SQL", tip: "Data Querying & Analysis" },
+              { icon: <SiFigma size={28} />, name: "Figma Make AI", color: "text-[#9B59B6]", tip: "AI-Powered Design" },
+              { icon: <SiGit size={28} />, name: "Git", color: "text-[#F05032]", tip: "Version Control" },
+              { icon: <SiVercel size={28} />, name: "Vercel", color: "text-white", tip: "Deployment & Hosting" },
+              { icon: <SiSupabase size={28} />, name: "Supabase", color: "text-[#3ECF8E]", tip: "Backend & Auth" },
             ].map((tool, i) => (
               <motion.div key={i} variants={scaleIn} className="tool-card aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent gap-4 p-5">
+                {tool.tip && <span className="tool-tooltip">{tool.tip}</span>}
                 <div className={`shrink-0 ${tool.color || ''}`}>
                   {tool.icon}
                 </div>
@@ -392,6 +442,8 @@ function App() {
             ))}
           </motion.div>
         </section>
+
+        <div className="section-divider max-w-2xl mx-auto" />
 
         {/* NEW: A Look At My Recent Work */}
         <section id="projects" className="container mx-auto px-6 mt-40 max-w-6xl">
@@ -407,9 +459,14 @@ function App() {
               <div>
                 <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Graduation Project · Case Study</p>
                 <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">GiftWise — AI Gift Direction</h3>
-                <p className="text-[14px] text-[#A1A1AA] mb-10 leading-relaxed">
+                <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
                   A zero-hallucination AI PWA that solves India's gifting translation gap — backed by a 45-person survey, competitive analysis, RICE-scored features, and a full monetisation and risk framework.
                 </p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {['User Research', 'RICE Scoring', 'PRD Writing', 'GTM Strategy'].map(tag => (
+                    <span key={tag} className="skill-pill" style={{fontSize:'11px',padding:'4px 12px'}}>{tag}</span>
+                  ))}
+                </div>
                 <a href="https://drive.google.com/file/d/1Oc4zMI0tdjIRkPRuvhTbXfidne7Xb2OJ/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
                   View Work <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
@@ -426,9 +483,14 @@ function App() {
               <div className="order-1 md:order-2">
                 <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Build · Case Study</p>
                 <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">IronLog — AI-Enhanced Workout Tracker</h3>
-                <p className="text-[14px] text-[#A1A1AA] mb-10 leading-relaxed">
+                <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
                   A safety-first fitness tracker where deterministic math drives every progression decision and AI only explains it — eliminating hallucination risk for weight recommendations.
                 </p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {['Product Build', 'Agile Sprint', 'Data Analysis', 'A/B Testing'].map(tag => (
+                    <span key={tag} className="skill-pill" style={{fontSize:'11px',padding:'4px 12px'}}>{tag}</span>
+                  ))}
+                </div>
                 <div className="flex flex-wrap items-center gap-8">
                   <a href="https://drive.google.com/file/d/1XSH4CWckVQc29CAmMSPlbmzGKeYNreiJ/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
                     View Case Study <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -444,9 +506,14 @@ function App() {
               <div>
                 <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Teardown</p>
                 <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">Make.com — New User Onboarding Teardown</h3>
-                <p className="text-[14px] text-[#A1A1AA] mb-10 leading-relaxed">
+                <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
                   Analysed Make.com's 10-step onboarding flow, mapped a 60% user drop-off funnel, identified 4 key friction points, and recommended sprint-level fixes with impact and effort scoring.
                 </p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {['Competitive Analysis', 'Funnel Analysis', 'UX Research', 'Sprint Planning'].map(tag => (
+                    <span key={tag} className="skill-pill" style={{fontSize:'11px',padding:'4px 12px'}}>{tag}</span>
+                  ))}
+                </div>
                 <a href="https://drive.google.com/file/d/16qkxrSGElUknYHC_-slTKBaohstBZYc/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
                   View Teardown <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
@@ -464,9 +531,14 @@ function App() {
                 <div className="order-1 md:order-2">
                   <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Requirements Document</p>
                   <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">Project Vaani — ChatGPT Voice Input PRD</h3>
-                  <p className="text-[14px] text-[#A1A1AA] mb-10 leading-relaxed">
+                  <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
                     A full PRD to increase voice input adoption among Indian college students on ChatGPT mobile — covering user research, RICE-scored solutions, north star metrics, and a phased A/B rollout plan.
                   </p>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {['User Research', 'RICE Framework', 'A/B Rollout', 'North Star Metric'].map(tag => (
+                      <span key={tag} className="skill-pill" style={{fontSize:'11px',padding:'4px 12px'}}>{tag}</span>
+                    ))}
+                  </div>
                   <a href="https://drive.google.com/file/d/1URlYGVvSvmRi56NdT7YOjqeG64o62t0i/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
                     View PRD <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                   </a>
@@ -484,6 +556,8 @@ function App() {
             </button>
           </div>
         </section>
+
+        <div className="section-divider max-w-2xl mx-auto" />
 
         {/* NEW: Recognition */}
         <section id="certification" className="container mx-auto px-6 mt-40 max-w-6xl">
@@ -561,6 +635,8 @@ function App() {
           </div>
         </section>
 
+        <div className="section-divider max-w-2xl mx-auto" />
+
         {/* NEW: Where You Can Find Me */}
         <section id="contact" className="container mx-auto px-6 mt-40 max-w-5xl mb-24">
           <motion.h2
@@ -576,14 +652,24 @@ function App() {
                 <img src="/assets/profile_photo_v2.png" alt="Mayur Shelar — Product Manager" loading="lazy" className="w-48 h-48 object-cover rounded-full bg-white/5 border border-white/10" />
               </div>
 
-              <div className="space-y-4 text-center">
-                <div className="flex items-center justify-center gap-3 text-[16px] text-white">
-                  <Mail size={18} />
-                  <span>Email: mayursh1111@gmail.com</span>
-                </div>
-                <div className="flex items-center justify-center gap-3 text-[16px] text-white">
-                  <Phone size={18} />
-                  <span>Phone: +91 98196 22036</span>
+              <div className="space-y-6 text-center">
+                <a
+                  href="mailto:mayursh1111@gmail.com"
+                  className="inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-[#3AEEE3]/30 bg-[#3AEEE3]/5 text-white font-medium text-[16px] hover:bg-[#3AEEE3]/12 hover:border-[#3AEEE3]/60 transition-all group shadow-lg shadow-[#3AEEE3]/5"
+                >
+                  <Mail size={20} className="text-[#3AEEE3]" />
+                  Let's Talk
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform text-[#3AEEE3]" />
+                </a>
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center justify-center gap-2 text-[13px] text-[#A1A1AA]">
+                    <Mail size={13} className="text-[#3AEEE3]/60" />
+                    <span>mayursh1111@gmail.com</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-[13px] text-[#A1A1AA]">
+                    <Phone size={13} className="text-[#3AEEE3]/60" />
+                    <span>+91 98196 22036</span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -609,6 +695,9 @@ function App() {
           </div>
         </section>
       </main>
+
+      {/* Footer glow */}
+      <div className="footer-glow" />
 
       {/* Footer */}
       <footer className="bg-[#121110] pt-16 pb-12 text-center">
@@ -636,7 +725,7 @@ function App() {
 
         <p className="text-[12px] text-[#A1A1AA]/60">©All Rights Reserved {new Date().getFullYear()}</p>
       </footer>
-    </div>
+    </motion.div>
   );
 }
 
