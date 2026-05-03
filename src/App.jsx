@@ -323,7 +323,7 @@ function App() {
           </motion.div>
         </section>
 
-        <div className="section-divider max-w-2xl mx-auto" />
+
 
         {/* ss3 & ss4: Experience */}
         <section id="experience" className="container mx-auto px-6 mt-40 max-w-5xl">
@@ -368,9 +368,9 @@ function App() {
           </div>
         </section>
 
-        <div className="section-divider max-w-2xl mx-auto" />
 
-        {/* ss5: I Help You To Make Wonderful Products */}
+
+        {/* ss5: What I Bring To The Table */}
         <section className="container mx-auto px-6 mt-40 max-w-5xl text-center">
           <motion.h2
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp}
@@ -387,16 +387,52 @@ function App() {
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer}
-            className="grid md:grid-cols-3 gap-12"
+            className="grid md:grid-cols-3 gap-6"
           >
             {[
-              { category: "Discovery & Strategy", skills: ["Product Discovery", "User Research", "Competitive Analysis", "GTM Strategy"] },
-              { category: "Execution & Delivery", skills: ["PRD Writing", "Stakeholder Management", "Agile & Sprint Planning", "RICE Prioritisation"] },
-              { category: "Technical & Design", skills: ["Wireframing", "Prompt Engineering", "Data Analysis", "A/B Testing"] },
+              {
+                icon: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
+                category: "Discovery & Strategy",
+                desc: "Understanding the problem before building the solution.",
+                skills: ["Product Discovery", "User Research", "Competitive Analysis", "GTM Strategy"]
+              },
+              {
+                icon: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>,
+                category: "Execution & Delivery",
+                desc: "Turning roadmaps into shipped, measurable outcomes.",
+                skills: ["PRD Writing", "Stakeholder Management", "Agile & Sprint Planning", "RICE Prioritisation"]
+              },
+              {
+                icon: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>,
+                category: "Technical & Design",
+                desc: "Bridging the gap between user needs and engineering.",
+                skills: ["Wireframing", "Prompt Engineering", "Data Analysis", "A/B Testing"]
+              },
             ].map((group, gi) => (
-              <motion.div key={gi} variants={fadeInUp} className="flex flex-col items-center">
-                <p className="text-[12px] font-medium text-[#3AEEE3] uppercase tracking-widest mb-5">{group.category}</p>
-                <div className="flex flex-wrap justify-center gap-2.5">
+              <motion.div
+                key={gi}
+                variants={fadeInUp}
+                className="card-gradient rounded-xl border border-white/5 p-8 flex flex-col items-start text-left"
+              >
+                {/* Top accent line */}
+                <div className="w-full h-px bg-gradient-to-r from-[#3AEEE3]/40 via-[#3AEEE3]/10 to-transparent mb-6" />
+
+                {/* Icon */}
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#3AEEE3]/15 to-[#EB27E3]/10 border border-white/10 flex items-center justify-center text-[#3AEEE3] mb-5 shrink-0">
+                  {group.icon}
+                </div>
+
+                {/* Category label */}
+                <p className="text-[11px] font-semibold text-[#3AEEE3] uppercase tracking-widest mb-1">{group.category}</p>
+
+                {/* Short description */}
+                <p className="text-[13px] text-[#A1A1AA] leading-relaxed mb-6">{group.desc}</p>
+
+                {/* Divider */}
+                <div className="w-full border-t border-dashed border-white/10 mb-6" />
+
+                {/* Skill pills */}
+                <div className="flex flex-wrap gap-2">
                   {group.skills.map((skill, si) => (
                     <span key={si} className="skill-pill">{skill}</span>
                   ))}
@@ -406,7 +442,7 @@ function App() {
           </motion.div>
         </section>
 
-        <div className="section-divider max-w-2xl mx-auto" />
+
 
         {/* Tools I Use */}
         <section className="container mx-auto px-6 mt-40 max-w-5xl">
@@ -418,32 +454,67 @@ function App() {
           </motion.h2>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            className="flex flex-col gap-4"
           >
-            {[
-              { icon: <img src="/assets/figma.svg" alt="Figma" className="w-[22px] h-[22px]" />, name: "Figma", tip: "Wireframing & Prototyping" },
-              { icon: <SiMongodb size={28} />, name: "MongoDB", color: "text-[#47A248]", tip: "NoSQL Database" },
-              { icon: <SiNotion size={28} />, name: "Notion", color: "text-white", tip: "Roadmaps & Documentation" },
-              { icon: <div className="w-10 h-10 rounded-full bg-[#A855F7] flex items-center justify-center"><div className="w-3 h-3 bg-white rotate-45" /></div>, name: "Whimsical", tip: "User Flows & Mind Maps" },
-              { icon: <SiGoogleanalytics size={28} />, name: "GA4", color: "text-[#E37400]", tip: "Product Analytics" },
-              { icon: <div className="flex items-center gap-1 text-[#F29111]"><FaDatabase size={22} /><span className="text-[16px] font-bold tracking-tighter">SQL</span></div>, name: "SQL", tip: "Data Querying & Analysis" },
-              { icon: <SiFigma size={28} />, name: "Figma Make AI", color: "text-[#9B59B6]", tip: "AI-Powered Design" },
-              { icon: <SiGit size={28} />, name: "Git", color: "text-[#F05032]", tip: "Version Control" },
-              { icon: <SiVercel size={28} />, name: "Vercel", color: "text-white", tip: "Deployment & Hosting" },
-              { icon: <SiSupabase size={28} />, name: "Supabase", color: "text-[#3ECF8E]", tip: "Backend & Auth" },
-            ].map((tool, i) => (
-              <motion.div key={i} variants={scaleIn} className="tool-card aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent gap-4 p-5">
-                {tool.tip && <span className="tool-tooltip">{tool.tip}</span>}
-                <div className={`shrink-0 ${tool.color || ''}`}>
-                  {tool.icon}
-                </div>
-                <span className="text-[13px] font-normal text-white/70 whitespace-nowrap">{tool.name}</span>
-              </motion.div>
-            ))}
+            {/* Row 1 & 2 — strict 4-column grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { icon: <img src="/assets/figma.svg" alt="Figma" className="w-[22px] h-[22px]" />, name: "Figma", tip: "Wireframing & Prototyping" },
+                { icon: <SiMongodb size={28} />, name: "MongoDB", color: "text-[#47A248]", tip: "NoSQL Database" },
+                { icon: <SiNotion size={28} />, name: "Notion", color: "text-white", tip: "Roadmaps & Documentation" },
+                { icon: <div className="w-10 h-10 rounded-full bg-[#A855F7] flex items-center justify-center"><div className="w-3 h-3 bg-white rotate-45" /></div>, name: "Whimsical", tip: "User Flows & Mind Maps" },
+                { icon: <SiGoogleanalytics size={28} />, name: "GA4", color: "text-[#E37400]", tip: "Product Analytics" },
+                { icon: <div className="flex items-center gap-1 text-[#F29111]"><FaDatabase size={22} /><span className="text-[16px] font-bold tracking-tighter">SQL</span></div>, name: "SQL", tip: "Data Querying & Analysis" },
+                { icon: <SiFigma size={28} />, name: "Figma Make AI", color: "text-[#9B59B6]", tip: "AI-Powered Design" },
+                { icon: <SiGit size={28} />, name: "Git", color: "text-[#F05032]", tip: "Version Control" },
+              ].map((tool, i) => (
+                <motion.div key={i} variants={scaleIn} className="tool-card aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent gap-4 p-5">
+                  {tool.tip && <span className="tool-tooltip">{tool.tip}</span>}
+                  <div className={`shrink-0 ${tool.color || ''}`}>
+                    {tool.icon}
+                  </div>
+                  <span className="text-[13px] font-normal text-white/70 whitespace-nowrap">{tool.name}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Row 3 — Vercel & Supabase centered in cols 2 & 3 */}
+            <div className="hidden md:grid md:grid-cols-4 gap-4">
+              <div /> {/* col 1 spacer */}
+              {[
+                { icon: <SiVercel size={28} />, name: "Vercel", color: "text-white", tip: "Deployment & Hosting" },
+                { icon: <SiSupabase size={28} />, name: "Supabase", color: "text-[#3ECF8E]", tip: "Backend & Auth" },
+              ].map((tool, i) => (
+                <motion.div key={i} variants={scaleIn} className="tool-card aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent gap-4 p-5">
+                  {tool.tip && <span className="tool-tooltip">{tool.tip}</span>}
+                  <div className={`shrink-0 ${tool.color || ''}`}>
+                    {tool.icon}
+                  </div>
+                  <span className="text-[13px] font-normal text-white/70 whitespace-nowrap">{tool.name}</span>
+                </motion.div>
+              ))}
+              <div /> {/* col 4 spacer */}
+            </div>
+
+            {/* Mobile: show Vercel & Supabase in 2-col grid */}
+            <div className="grid grid-cols-2 gap-4 md:hidden">
+              {[
+                { icon: <SiVercel size={28} />, name: "Vercel", color: "text-white", tip: "Deployment & Hosting" },
+                { icon: <SiSupabase size={28} />, name: "Supabase", color: "text-[#3ECF8E]", tip: "Backend & Auth" },
+              ].map((tool, i) => (
+                <motion.div key={i} variants={scaleIn} className="tool-card aspect-square w-full max-w-[160px] mx-auto flex flex-col items-center justify-center rounded-xl border border-white/10 bg-transparent gap-4 p-5">
+                  {tool.tip && <span className="tool-tooltip">{tool.tip}</span>}
+                  <div className={`shrink-0 ${tool.color || ''}`}>
+                    {tool.icon}
+                  </div>
+                  <span className="text-[13px] font-normal text-white/70 whitespace-nowrap">{tool.name}</span>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </section>
 
-        <div className="section-divider max-w-2xl mx-auto" />
+
 
         {/* NEW: A Look At My Recent Work */}
         <section id="projects" className="container mx-auto px-6 mt-40 max-w-6xl">
@@ -557,7 +628,7 @@ function App() {
           </div>
         </section>
 
-        <div className="section-divider max-w-2xl mx-auto" />
+
 
         {/* NEW: Recognition */}
         <section id="certification" className="container mx-auto px-6 mt-40 max-w-6xl">
@@ -635,7 +706,7 @@ function App() {
           </div>
         </section>
 
-        <div className="section-divider max-w-2xl mx-auto" />
+
 
         {/* NEW: Where You Can Find Me */}
         <section id="contact" className="container mx-auto px-6 mt-40 max-w-5xl mb-24">
