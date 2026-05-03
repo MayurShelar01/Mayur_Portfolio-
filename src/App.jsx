@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Download, MapPin, Phone, Users, BarChart2, BrainCircuit, RefreshCw, ArrowRight, Mail, Menu, X, ArrowUp, FileText } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Download, MapPin, Phone, Users, BarChart2, BrainCircuit, RefreshCw, ArrowRight, Mail, Menu, X, ArrowUp, FileText, ChevronDown } from 'lucide-react';
 import { SiFigma, SiGit, SiNotion, SiGoogleanalytics, SiVercel, SiSupabase, SiMongodb } from 'react-icons/si';
 import { FaDatabase, FaLinkedin, FaGithub } from 'react-icons/fa';
-import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 
 function App() {
   const [showAllProjects, setShowAllProjects] = useState(false);
@@ -13,6 +13,7 @@ function App() {
   const [isDesktop, setIsDesktop] = useState(() => window.matchMedia('(pointer: fine) and (min-width: 768px)').matches);
   const [taglineIdx, setTaglineIdx] = useState(0);
   const [cursorPos, setCursorPos] = useState({ x: -500, y: -500 });
+  const [loaded, setLoaded] = useState(false);
 
   // Card spotlight glow: track mouse position across all cards
   useEffect(() => {
@@ -43,6 +44,14 @@ function App() {
     sections.forEach((section) => observer.observe(section));
     return () => sections.forEach((section) => observer.unobserve(section));
   }, []);
+
+  // Preloader
+  useEffect(() => {
+    document.fonts.ready.then(() => {
+      setTimeout(() => setLoaded(true), 600);
+    });
+  }, []);
+
 
   // Back-to-top visibility
   useEffect(() => {
@@ -117,12 +126,43 @@ function App() {
   ];
 
   return (
-    <motion.div
-      className="min-h-screen text-[#CBD5E1] bg-[#020713] font-['Inter'] relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-    >
+    <>
+      {/* Preloader */}
+      <AnimatePresence>
+        {!loaded && (
+          <motion.div
+            key="preloader"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#020713]"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="font-['Syne'] font-bold text-[40px] text-gradient select-none"
+            >
+              MS
+            </motion.div>
+            <div className="mt-6 w-32 h-[2px] bg-white/5 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ x: '-100%' }}
+                animate={{ x: '0%' }}
+                transition={{ duration: 0.55, ease: 'easeOut' }}
+                className="h-full bg-gradient-to-r from-[#3AEEE3] to-[#EB27E3]"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        className="min-h-screen text-[#CBD5E1] bg-[#020713] font-['Inter'] relative overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: loaded ? 1 : 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
       {/* Custom cursor glow — desktop only */}
       {isDesktop && (
         <div className="cursor-glow" style={{ left: cursorPos.x, top: cursorPos.y }} />
@@ -238,26 +278,34 @@ function App() {
             <div className="hero-blob hero-blob-2" />
           </div>
 
-          <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="relative z-10">
-            <p className="text-[14px] font-medium mb-4 text-[#CBD5E1]">Hey, I'm <span className="text-white font-bold">Mayur</span></p>
-            <h1 className="text-[40px] md:text-[56px] lg:text-[64px] font-medium font-['Syne'] text-white leading-tight tracking-tight">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.18, delayChildren: 0.1 } }
+            }}
+            className="relative z-10"
+          >
+            <motion.p variants={fadeInUp} className="text-[14px] font-medium mb-4 text-[#CBD5E1]">Hey, I'm <span className="text-white font-bold">Mayur</span></motion.p>
+            <motion.h1 variants={fadeInUp} className="text-[40px] md:text-[56px] lg:text-[64px] font-medium font-['Syne'] text-white leading-tight tracking-tight">
               A Top PM Fellow · Next Leap
-            </h1>
-            <h2 className="text-[40px] md:text-[56px] lg:text-[64px] font-medium font-['Syne'] leading-tight mb-8">
+            </motion.h1>
+            <motion.h2 variants={fadeInUp} className="text-[40px] md:text-[56px] lg:text-[64px] font-medium font-['Syne'] leading-tight mb-8">
               <span className="text-gradient inline-block">
                 {"Product Manager".split("").map((char, i) => (
                   <motion.span
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 + i * 0.04, duration: 0.3, ease: "easeOut" }}
+                    transition={{ delay: 0.8 + i * 0.04, duration: 0.3, ease: "easeOut" }}
                   >
                     {char === " " ? "\u00A0" : char}
                   </motion.span>
                 ))}
               </span>
-            </h2>
-            <div className="h-12 flex items-center justify-center mb-32">
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="h-12 flex items-center justify-center mb-32">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={taglineIdx}
@@ -270,56 +318,56 @@ function App() {
                   {taglines[taglineIdx]}
                 </motion.p>
               </AnimatePresence>
-            </div>
+            </motion.div>
 
-            <div className="max-w-4xl mx-auto border-t border-dashed border-white/20 pt-5" />
-            <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 text-[13px] text-[#CBD5E1]">
-              <div className="flex items-center gap-2">
-                <MapPin size={14} className="text-[#3AEEE3]" />
-                <span>Mumbai, India</span>
+            <motion.div variants={fadeInUp}>
+              <div className="max-w-4xl mx-auto border-t border-dashed border-white/20 pt-5" />
+              <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 text-[13px] text-[#CBD5E1]">
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} className="text-[#3AEEE3]" />
+                  <span>Mumbai, India</span>
+                </div>
+                <a href="mailto:mayursh1111@gmail.com" className="flex items-center gap-2 hover:text-[#3AEEE3] transition-colors">
+                  <Mail size={14} className="text-[#3AEEE3]" />
+                  <span>mayursh1111@gmail.com</span>
+                </a>
+                <a href="tel:+919819622036" className="flex items-center gap-2 hover:text-[#3AEEE3] transition-colors">
+                  <Phone size={14} className="text-[#3AEEE3]" />
+                  <span>+91 98196 22036</span>
+                </a>
               </div>
-              <a href="mailto:mayursh1111@gmail.com" className="flex items-center gap-2 hover:text-[#3AEEE3] transition-colors">
-                <Mail size={14} className="text-[#3AEEE3]" />
-                <span>mayursh1111@gmail.com</span>
-              </a>
-              <a href="tel:+919819622036" className="flex items-center gap-2 hover:text-[#3AEEE3] transition-colors">
-                <Phone size={14} className="text-[#3AEEE3]" />
-                <span>+91 98196 22036</span>
-              </a>
-            </div>
+            </motion.div>
           </motion.div>
         </section>
 
         <div className="section-divider max-w-2xl mx-auto" />
 
+
         {/* ss2: How I Work */}
         <section className="container mx-auto px-6 mt-32 max-w-5xl">
-          <motion.h2
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp}
-            className="text-[32px] md:text-[40px] font-medium font-['Syne'] text-center text-white mb-16"
-          >
-            How I Work
-          </motion.h2>
           <motion.div
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
-            className="grid md:grid-cols-2 gap-6"
+            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.15 } } }}
           >
-            {[
-              { icon: <Users size={28} strokeWidth={1.5} />, title: "People-Led Execution", desc: "Great products are built by great teams. I've led and coordinated large-scale events across 20+ institutions bringing together diverse people, managing pressure, and always delivering on the goal." },
-              { icon: <BarChart2 size={28} strokeWidth={1.5} />, title: "Data Driven Decisions", desc: "I let data lead the way. From defining success metrics to prioritising features every product decision I make is backed by evidence, not instinct." },
-              { icon: <RefreshCw size={28} strokeWidth={1.5} />, title: "User-Centric Design", desc: "I start with the user, always. Real conversations over assumptions because building the right thing matters more than building the thing fast." },
-              { icon: <BrainCircuit size={28} strokeWidth={1.5} />, title: "Continuous Learning", desc: "Every product, every cohort, every challenge teaches me something new. I stay curious, adapt quickly, and bring fresh thinking into everything I work on." },
-            ].map((card, i) => (
-              <motion.div key={i} variants={fadeInUp} className="card-gradient p-8 rounded-xl border border-white/5">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center text-white">
-                    {card.icon}
+            <motion.h2 variants={fadeInUp} className="text-[32px] md:text-[40px] font-medium font-['Syne'] text-center text-white mb-16">How I Work</motion.h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                { icon: <Users size={28} strokeWidth={1.5} />, title: "People-Led Execution", desc: "Great products are built by great teams. I've led and coordinated large-scale events across 20+ institutions bringing together diverse people, managing pressure, and always delivering on the goal." },
+                { icon: <BarChart2 size={28} strokeWidth={1.5} />, title: "Data Driven Decisions", desc: "I let data lead the way. From defining success metrics to prioritising features every product decision I make is backed by evidence, not instinct." },
+                { icon: <RefreshCw size={28} strokeWidth={1.5} />, title: "User-Centric Design", desc: "I start with the user, always. Real conversations over assumptions because building the right thing matters more than building the thing fast." },
+                { icon: <BrainCircuit size={28} strokeWidth={1.5} />, title: "Continuous Learning", desc: "Every product, every cohort, every challenge teaches me something new. I stay curious, adapt quickly, and bring fresh thinking into everything I work on." },
+              ].map((card, i) => (
+                <motion.div key={i} variants={fadeInUp} className="card-gradient p-8 rounded-xl border border-white/5">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center text-white">
+                      {card.icon}
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-[20px] font-medium text-white mb-3 font-['Syne']">{card.title}</h3>
-                <p className="text-[13px] text-[#A1A1AA] leading-relaxed">{card.desc}</p>
-              </motion.div>
-            ))}
+                  <h3 className="text-[20px] font-medium text-white mb-3 font-['Syne']">{card.title}</h3>
+                  <p className="text-[13px] text-[#A1A1AA] leading-relaxed">{card.desc}</p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </section>
 
@@ -533,22 +581,17 @@ function App() {
                 <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
                   A zero-hallucination AI PWA that solves India's gifting translation gap — backed by a 45-person survey, competitive analysis, RICE-scored features, and a full monetisation and risk framework.
                 </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {['User Research', 'RICE Scoring', 'PRD Writing', 'GTM Strategy'].map(tag => (
-                    <span key={tag} className="skill-pill" style={{fontSize:'11px',padding:'4px 12px'}}>{tag}</span>
-                  ))}
-                </div>
                 <a href="https://drive.google.com/file/d/1Oc4zMI0tdjIRkPRuvhTbXfidne7Xb2OJ/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
                   View Work <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
-              <div className="rounded-xl overflow-hidden bg-[#151922] flex items-center justify-center h-full">
+              <div className="project-image-wrap rounded-xl bg-[#151922] flex items-center justify-center h-full">
                 <img src="/assets/giftwise_cover.png" alt="GiftWise — AI-powered gift recommendation app" loading="lazy" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInRight} className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="order-2 md:order-1 rounded-xl overflow-hidden bg-[#151922] flex items-center justify-center h-full">
+              <div className="order-2 md:order-1 project-image-wrap rounded-xl bg-[#151922] flex items-center justify-center h-full">
                 <img src="/assets/ironlog_cover.png" alt="IronLog — AI-enhanced workout tracker" loading="lazy" className="w-full h-full object-cover" />
               </div>
               <div className="order-1 md:order-2">
@@ -557,11 +600,6 @@ function App() {
                 <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
                   A safety-first fitness tracker where deterministic math drives every progression decision and AI only explains it — eliminating hallucination risk for weight recommendations.
                 </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {['Product Build', 'Agile Sprint', 'Data Analysis', 'A/B Testing'].map(tag => (
-                    <span key={tag} className="skill-pill" style={{fontSize:'11px',padding:'4px 12px'}}>{tag}</span>
-                  ))}
-                </div>
                 <div className="flex flex-wrap items-center gap-8">
                   <a href="https://drive.google.com/file/d/1XSH4CWckVQc29CAmMSPlbmzGKeYNreiJ/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
                     View Case Study <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -580,23 +618,18 @@ function App() {
                 <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
                   Analysed Make.com's 10-step onboarding flow, mapped a 60% user drop-off funnel, identified 4 key friction points, and recommended sprint-level fixes with impact and effort scoring.
                 </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {['Competitive Analysis', 'Funnel Analysis', 'UX Research', 'Sprint Planning'].map(tag => (
-                    <span key={tag} className="skill-pill" style={{fontSize:'11px',padding:'4px 12px'}}>{tag}</span>
-                  ))}
-                </div>
                 <a href="https://drive.google.com/file/d/16qkxrSGElUknYHC_-slTKBaohstBZYc/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
                   View Teardown <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
-              <div className="rounded-xl overflow-hidden bg-[#151922] flex items-center justify-center h-full">
+              <div className="project-image-wrap rounded-xl bg-[#151922] flex items-center justify-center h-full">
                 <img src="/assets/make_teardown_cover.png" alt="Make.com — New user onboarding teardown" loading="lazy" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
             {showAllProjects && (
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInRight} className="grid md:grid-cols-2 gap-12 items-center">
-                <div className="order-2 md:order-1 rounded-xl overflow-hidden bg-[#151922] flex items-center justify-center h-full">
+                <div className="order-2 md:order-1 project-image-wrap rounded-xl bg-[#151922] flex items-center justify-center h-full">
                   <img src="/assets/project_vaani_cover.jpg" alt="Project Vaani — ChatGPT voice input PRD" loading="lazy" className="w-full h-full object-cover" />
                 </div>
                 <div className="order-1 md:order-2">
@@ -605,11 +638,6 @@ function App() {
                   <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
                     A full PRD to increase voice input adoption among Indian college students on ChatGPT mobile — covering user research, RICE-scored solutions, north star metrics, and a phased A/B rollout plan.
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {['User Research', 'RICE Framework', 'A/B Rollout', 'North Star Metric'].map(tag => (
-                      <span key={tag} className="skill-pill" style={{fontSize:'11px',padding:'4px 12px'}}>{tag}</span>
-                    ))}
-                  </div>
                   <a href="https://drive.google.com/file/d/1URlYGVvSvmRi56NdT7YOjqeG64o62t0i/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
                     View PRD <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                   </a>
@@ -621,9 +649,10 @@ function App() {
           <div className="flex justify-center mt-16">
             <button
               onClick={() => setShowAllProjects(!showAllProjects)}
-              className="inline-flex items-center gap-2 bg-[#2A2B31]/40 hover:bg-[#2A2B31]/80 px-6 py-3 rounded-md text-[14px] font-medium transition-colors text-[#CBD5E1] hover:text-white border border-white/10"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-[14px] font-medium transition-all text-[#CBD5E1] hover:text-white border border-white/10 hover:border-[#3AEEE3]/40 hover:bg-[#3AEEE3]/5 hover:shadow-[0_0_20px_rgba(58,238,227,0.08)]"
             >
-              {showAllProjects ? "View Less ↑" : "View More →"}
+              {showAllProjects ? 'View Less' : 'View More'}
+              <ChevronDown size={16} className={`transition-transform duration-300 text-[#3AEEE3] ${showAllProjects ? 'rotate-180' : ''}`} />
             </button>
           </div>
         </section>
@@ -699,9 +728,10 @@ function App() {
           <div className="flex justify-center mt-12">
             <button
               onClick={() => setShowAllCertificates(!showAllCertificates)}
-              className="inline-flex items-center gap-2 bg-[#2A2B31]/40 hover:bg-[#2A2B31]/80 px-6 py-3 rounded-md text-[14px] font-medium transition-colors text-[#CBD5E1] hover:text-white border border-white/10"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-[14px] font-medium transition-all text-[#CBD5E1] hover:text-white border border-white/10 hover:border-[#3AEEE3]/40 hover:bg-[#3AEEE3]/5 hover:shadow-[0_0_20px_rgba(58,238,227,0.08)]"
             >
-              {showAllCertificates ? "View Less ↑" : "View More →"}
+              {showAllCertificates ? 'View Less' : 'View More'}
+              <ChevronDown size={16} className={`transition-transform duration-300 text-[#3AEEE3] ${showAllCertificates ? 'rotate-180' : ''}`} />
             </button>
           </div>
         </section>
@@ -719,28 +749,20 @@ function App() {
 
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex flex-col items-center relative">
-              <div className="relative mb-8">
+              <div className="profile-glow relative mb-8">
                 <img src="/assets/profile_photo_v2.png" alt="Mayur Shelar — Product Manager" loading="lazy" className="w-48 h-48 object-cover rounded-full bg-white/5 border border-white/10" />
               </div>
 
               <div className="space-y-6 text-center">
-                <a
-                  href="mailto:mayursh1111@gmail.com"
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-[#3AEEE3]/30 bg-[#3AEEE3]/5 text-white font-medium text-[16px] hover:bg-[#3AEEE3]/12 hover:border-[#3AEEE3]/60 transition-all group shadow-lg shadow-[#3AEEE3]/5"
-                >
-                  <Mail size={20} className="text-[#3AEEE3]" />
-                  Let's Talk
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform text-[#3AEEE3]" />
-                </a>
                 <div className="space-y-2 pt-1">
-                  <div className="flex items-center justify-center gap-2 text-[13px] text-[#A1A1AA]">
+                  <a href="mailto:mayursh1111@gmail.com" className="flex items-center justify-center gap-2 text-[13px] text-[#A1A1AA] hover:text-[#3AEEE3] transition-colors">
                     <Mail size={13} className="text-[#3AEEE3]/60" />
                     <span>mayursh1111@gmail.com</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-2 text-[13px] text-[#A1A1AA]">
+                  </a>
+                  <a href="tel:+919819622036" className="flex items-center justify-center gap-2 text-[13px] text-[#A1A1AA] hover:text-[#3AEEE3] transition-colors">
                     <Phone size={13} className="text-[#3AEEE3]/60" />
                     <span>+91 98196 22036</span>
-                  </div>
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -797,6 +819,7 @@ function App() {
         <p className="text-[12px] text-[#A1A1AA]/60">©All Rights Reserved {new Date().getFullYear()}</p>
       </footer>
     </motion.div>
+    </>
   );
 }
 
