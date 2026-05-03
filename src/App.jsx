@@ -180,9 +180,6 @@ function App() {
       <nav className="fixed top-0 w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center bg-[#020713]/80 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center gap-3">
           <span className="font-['Syne'] font-semibold text-lg text-white tracking-wide">Mayur Shelar</span>
-          <span className="hidden md:inline-flex items-center gap-1.5 text-[11px] font-medium text-[#34D399] bg-[#34D399]/10 border border-[#34D399]/20 px-2.5 py-1 rounded-full">
-            <span className="status-dot" />Open To Work
-          </span>
         </div>
         <div className="hidden md:flex gap-10 text-[13px] font-medium text-[#CBD5E1]">
           {navItems.map((item) => (
@@ -201,8 +198,9 @@ function App() {
         </div>
         <div className="flex items-center gap-4">
           <a
-            href="#"
-            onClick={(e) => { e.preventDefault(); alert("Please upload your Mayur_Shelar_Resume.pdf to the public/assets directory."); }}
+            href="https://drive.google.com/file/d/1cfwYc-PJleusksTHh0LfsW3haifqgE-Y/view?usp=sharing"
+            target="_blank"
+            rel="noreferrer"
             className="hidden md:flex items-center gap-2 bg-[#2A2B31]/40 hover:bg-[#2A2B31]/80 px-5 py-2.5 rounded-md text-[13px] font-medium transition-colors text-[#CBD5E1] border border-white/10"
           >
             <FileText size={15} className="text-[#3AEEE3]" />
@@ -242,8 +240,9 @@ function App() {
               </a>
             ))}
             <a
-              href="#"
-              onClick={(e) => { e.preventDefault(); alert("Please upload your Mayur_Shelar_Resume.pdf to the public/assets directory."); }}
+              href="https://drive.google.com/file/d/1cfwYc-PJleusksTHh0LfsW3haifqgE-Y/view?usp=sharing"
+              target="_blank"
+              rel="noreferrer"
               className="flex items-center gap-2 text-[14px] font-medium text-[#3AEEE3]"
             >
               <Download size={14} />
@@ -814,7 +813,7 @@ function App() {
         <div className="w-full max-w-5xl mx-auto h-px bg-white/5 mb-12"></div>
 
         <div className="font-['Syne'] font-medium text-[28px] text-white tracking-[0.2em] mb-4">MAYUR SHELAR</div>
-        <p className="text-[14px] text-[#A1A1AA] mb-8">Product Manager · Open To Work</p>
+        <p className="text-[14px] text-[#A1A1AA] mb-8">Product Manager</p>
 
         <p className="text-[12px] text-[#A1A1AA]/60">©All Rights Reserved {new Date().getFullYear()}</p>
       </footer>

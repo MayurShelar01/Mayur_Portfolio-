@@ -240,12 +240,12 @@ p {
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #22c55e;
-  animation: pulse-dot 2s ease-in-out infinite;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+  background: #3AEEE3;
+  animation: pulse-dot 2.5s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(58, 238, 227, 0.4);
 }
 
 /* ——— Section gradient divider ——— */
