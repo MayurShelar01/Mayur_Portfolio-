@@ -612,36 +612,54 @@ function App() {
 
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInLeft} className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Teardown</p>
-                <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">Make.com — New User Onboarding Teardown</h3>
+                <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">AI Product Build</p>
+                <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">PM Career Copilot — Autonomous Job Search Agent</h3>
                 <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
-                  Analysed Make.com's 10-step onboarding flow, mapped a 60% user drop-off funnel, identified 4 key friction points, and recommended sprint-level fixes with impact and effort scoring.
+                  An AI agent that automates the end-to-end PM application workflow by parsing job descriptions, identifying skill gaps, and generating targeted outreach and interview prep with structured, step-by-step reasoning.
                 </p>
-                <a href="https://drive.google.com/file/d/16qkxrSGElUknYHC_-slTKBaohstBZYc/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
-                  View Teardown <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <a href="https://career-copilot-9zgdwctrd-mayurshelar01s-projects.vercel.app/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
+                  View Live App <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
               <div className="project-image-wrap rounded-xl bg-[#151922] flex items-center justify-center h-full">
-                <img src="/assets/make_teardown_cover.png" alt="Make.com — New user onboarding teardown" loading="lazy" className="w-full h-full object-cover" />
+                <img src="/assets/copilot_cover.png" alt="PM Career Copilot — Autonomous Job Search Agent" loading="lazy" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
             {showAllProjects && (
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInRight} className="grid md:grid-cols-2 gap-12 items-center">
-                <div className="order-2 md:order-1 project-image-wrap rounded-xl bg-[#151922] flex items-center justify-center h-full">
-                  <img src="/assets/project_vaani_cover.jpg" alt="Project Vaani — ChatGPT voice input PRD" loading="lazy" className="w-full h-full object-cover" />
-                </div>
-                <div className="order-1 md:order-2">
-                  <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Requirements Document</p>
-                  <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">Project Vaani — ChatGPT Voice Input PRD</h3>
-                  <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
-                    A full PRD to increase voice input adoption among Indian college students on ChatGPT mobile — covering user research, RICE-scored solutions, north star metrics, and a phased A/B rollout plan.
-                  </p>
-                  <a href="https://drive.google.com/file/d/1URlYGVvSvmRi56NdT7YOjqeG64o62t0i/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
-                    View PRD <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </div>
-              </motion.div>
+              <>
+                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInRight} className="grid md:grid-cols-2 gap-12 items-center">
+                  <div className="order-2 md:order-1 project-image-wrap rounded-xl bg-[#151922] flex items-center justify-center h-full">
+                    <img src="/assets/make_teardown_cover.png" alt="Make.com — New user onboarding teardown" loading="lazy" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="order-1 md:order-2">
+                    <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Teardown</p>
+                    <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">Make.com — New User Onboarding Teardown</h3>
+                    <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
+                      Analysed Make.com's 10-step onboarding flow, mapped a 60% user drop-off funnel, identified 4 key friction points, and recommended sprint-level fixes with impact and effort scoring.
+                    </p>
+                    <a href="https://drive.google.com/file/d/16qkxrSGElUknYHC_-slTKBaohstBZYc/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
+                      View Teardown <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  </div>
+                </motion.div>
+
+                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInLeft} className="grid md:grid-cols-2 gap-12 items-center">
+                  <div>
+                    <p className="text-[13px] text-[#3AEEE3] font-medium mb-3">Product Requirements Document</p>
+                    <h3 className="text-[28px] font-medium text-white mb-6 font-['Syne'] leading-tight">Project Vaani — ChatGPT Voice Input PRD</h3>
+                    <p className="text-[14px] text-[#A1A1AA] mb-4 leading-relaxed">
+                      A full PRD to increase voice input adoption among Indian college students on ChatGPT mobile — covering user research, RICE-scored solutions, north star metrics, and a phased A/B rollout plan.
+                    </p>
+                    <a href="https://drive.google.com/file/d/1URlYGVvSvmRi56NdT7YOjqeG64o62t0i/view?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[15px] font-medium text-[#CBD5E1] hover:text-white transition-colors group">
+                      View PRD <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  </div>
+                  <div className="project-image-wrap rounded-xl bg-[#151922] flex items-center justify-center h-full">
+                    <img src="/assets/project_vaani_cover.jpg" alt="Project Vaani — ChatGPT voice input PRD" loading="lazy" className="w-full h-full object-cover" />
+                  </div>
+                </motion.div>
+              </>
             )}
           </div>
 
